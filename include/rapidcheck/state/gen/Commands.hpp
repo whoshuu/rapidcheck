@@ -152,7 +152,7 @@ private:
           throw;
         }
         // What to do?
-      } catch (const GenerationFailure &failure) {
+      } catch (const GenerationFailure &) {
         // What to do?
       }
     }
