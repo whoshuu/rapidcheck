@@ -31,7 +31,7 @@ install:
   - sudo apt-get install -qq g++-4.9
 
   # Also use it if that's what we're going for
-  - if [ "$CC" = "gcc" ]; then
+  - if [ "$CC" == "gcc" ]; then
       export CC=gcc-4.9 &&
       export CXX="g++-4.9";
     fi
