@@ -7,6 +7,15 @@ compiler:
 env:
   - CMAKE_BUILD_TYPE=Debug
   - CMAKE_BUILD_TYPE=Release
+  - CMAKE_BUILD_TYPE=Debug GCC_5_1=ON
+  - CMAKE_BUILD_TYPE=Release GCC_5_1=ON
+
+matrix:
+  exclude:
+    - compiler: clang
+      env: CMAKE_BUILD_TYPE=Debug GCC_5_1=ON
+    - compiler: clang
+      env: CMAKE_BUILD_TYPE=Release GCC_5_1=ON
 
 before_install:
   # CMake 3.x
@@ -27,13 +36,22 @@ install:
   - cmake --version
   - ninja --version
 
-  # g++-4.9, also needed for Clang since we need a newer version of libstc++
-  - sudo apt-get install -qq g++-4.9
+  # g++, for Clang we use g++-4.9 since we need a newer version of libstc++
+  - if [ "$GCC_5_1" == "ON" ]; then
+      sudo apt-get install -qq g++-5;
+    else
+      sudo apt-get install -qq g++-4.9;
+    fi
 
   # Also use it if that's what we're going for
   - if [ "$CC" == "gcc" ]; then
-      export CC=gcc-4.9 &&
-      export CXX="g++-4.9";
+      if [ "$GCC_5_1" == "ON" ]; then
+        export CC=gcc-5 &&
+        export CXX="g++-5";
+      else
+        export CC=gcc-4.9 &&
+        export CXX="g++-4.9";
+      fi
     fi
 
   # clang 3.4
